@@ -118,9 +118,6 @@ class TemperatureSensor
 // Instantiate the sensor
 local sensor = TemperatureSensor(I2C_89, 0x4c);
  
-// Output port to send temperature readings
-local output = OutputPort("Temperature", "number");
- 
 // Capture and log a temperature reading every 5s
 function capture()
 {
@@ -136,12 +133,12 @@ function capture()
     // Output the temperature
     local temp_c = sensor.getTemperature();
     local temp_f = temp_c * 9.0/5.0 + 32.0;
-    output.set(temp_c);
-    server.show(format("%3.1fC, %3.1fF", temp_c, temp_f));
+    agent.send("temperature", temp_c);
+    server.log(format("%3.1fC, %3.1fF", temp_c, temp_f));
 }
  
 // Register with the server
-imp.configure("Temperature Logger", [], [output]);
+//imp.configure("Temperature Logger", [], [output]);
  
 // Start capturing temperature
 capture();
